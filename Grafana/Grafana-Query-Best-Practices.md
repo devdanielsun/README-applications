@@ -1,20 +1,21 @@
 # Grafana Query Best Practices
 
-## 📑 Inhoudsopgave
-- [Dashboard Performance Tips](#-resource-optimalisatie)
-- [Kritieke Optimalisaties](#-kritieke-performance-optimalisaties)
-- [Kosten Optimalisatie](#-kosten-optimalisatie)
-- [Quick Checklist](#-quick-implementation-checklist)
+## Inhoudsopgave
+- [Kritieke Performance Optimalisaties](#kritieke-performance-optimalisaties)
+- [Kosten Optimalisatie](#kosten-optimalisatie)
+- [Grafana Specifiek](#grafana-specifiek)
+- [Monitoring Best Practices](#monitoring-best-practices)
+- [Quick Checklist](#quick-implementation-checklist)
 
-## ⚡ Resource Optimalisatie
+## Kritieke Performance Optimalisaties
+
+### 1. **Resource Optimalisaties**
 
 - **Auto-refresh:** Zet alleen aan voor kritieke monitoring - verspilt anders resources en geld
 - **Environment switching:** Vermijd snel wisselen tussen (sub)omgevingen - elke switch triggert nieuwe queries
 - **Panel lazy loading:** Klap niet-kritieke panelen standaard in - data wordt pas geladen bij uitklappen
 
-## 🚨 Kritieke Performance Optimalisaties
-
-### 1. **Tijd Filtering - ALTIJD Verplicht**
+### 2. **Tijd Filtering - ALTIJD Verplicht**
 
 **Impact:** 90-99% minder data processing, 10-100x sneller
 
@@ -27,7 +28,7 @@
 
 **Met tijd filter:** Alleen relevante partitions → €0.50 per query, 2-3 seconden
 
-### 2. **Filter Volgorde + Early Projection**
+### 3. **Filter Volgorde + Early Projection**
 
 **Impact:** 20-80% sneller door optimale query execution
 
@@ -39,7 +40,7 @@ AppMetrics
 | where AppRoleName startswith "prefix"   // String ops op kleine dataset
 ```
 
-### 3. **Efficient String Matching**
+### 4. **Efficient String Matching**
 
 **Performance:** `== (1μs)` → `has (10μs)` → `startswith (50μs)` → `contains (1000μs)`
 
@@ -50,9 +51,9 @@ AppMetrics
 // VERMIJD: contains, regex (geen index mogelijk)
 ```
 
-## 💰 Kosten Optimalisatie
+## Kosten Optimalisatie
 
-### 4. **Result Limits + Smart Aggregatie**
+### 5. **Result Limits + Smart Aggregatie**
 
 **Grafana max:** 10K datapoints - meer = verspilling + browser crash risk
 
@@ -62,7 +63,7 @@ AppMetrics
 | limit 1000                                           // Safety net
 ```
 
-### 5. **Herbruikbare Variabelen**
+### 6. **Herbruikbare Variabelen**
 
 **Problem:** Environment filter herhaald in 10+ queries = maintenance hell
 
@@ -71,9 +72,9 @@ let EnvironmentFilter = case('${SubEnvironment}' == 'o2-', 'xyz-o2-', 'xyz--');
 AppMetrics | where AppRoleName startswith EnvironmentFilter  // Single source of truth
 ```
 
-## 📊 Grafana Specifiek
+## Grafana Specifiek
 
-### 6. **Template Variables & Caching**
+### 7. **Template Variables & Caching**
 
 ```kql
 | where $__timeFilter(TimeGenerated)  // Auto tijd range from dashboard
@@ -83,28 +84,28 @@ AppMetrics | where AppRoleName startswith EnvironmentFilter  // Single source o
 
 **Pro tip:** Enable query caching 5-60 min in dashboard settings
 
-### 7. **Data Transformation Strategy**
+### 8. **Data Transformation Strategy**
 
 - **In KQL:** Complex logic, aggregations, filtering (distributed processing)
 - **In Grafana:** UI formatting, simple unit conversions, multi-query joins
 
-## ⚠️ Performance Killers - VERMIJD ALTIJD
+## Performance Killers - VERMIJD ALTIJD
 
 ```kql
-// 💀 DESASTREUS - geen tijd filter  
+// DESASTREUS - geen tijd filter  
 AppMetrics | where Name == "metric"  // Scant alle TB's data
 
-// 💀 CPU KILLER - regex operations
+// CPU KILLER - regex operations
 | where AppRoleName matches regex ".*pattern.*" // 100x langzamer dan startswith
 
-// 💀 INDEX BREAKER - multiple OR  
+// INDEX BREAKER - multiple OR  
 | where Name == "a" or Name == "b" or Name == "c"  // 3 separate lookups
 | where Name has_any ("a", "b", "c")              // ✅ GOED: hash set lookup
 ```
 
 **Performance impact:** Regex vs startswith
 
-## 🎯 Monitoring Best Practices
+## Monitoring Best Practices
 
 ### Health Checks (high frequency)
 
@@ -125,30 +126,30 @@ AppExceptions
 | top 5 by count_ desc             // Focus op grootste problemen
 ```
 
-## 📋 Quick Implementation Checklist
+## Quick Implementation Checklist
 
-### 🚨 Critical (Do First)
+### Critical (Do First)
 
  - `$__timeFilter()` of `ago()` in ELKE query
  - Tijd filter staat bovenaan where clauses
  - `project` direct na filtering voor memory optimization
  - `limit`/`top` voor queries die veel rijen kunnen retourneren
 
-### 🔧 Optimization (Do Second)
+### Optimization (Do Second)
 
 - [ ] `==`/`has`/`startswith` gebruiken i.p.v. `contains`/`regex`
 - [ ] `has_any()` voor multiple OR conditions
 - [ ] Template variables voor dynamic filtering
 - [ ] Query caching enabled (5-60min) in Grafana
 
-### 📈 Monitoring Targets
+### Monitoring Targets
 
 - [ ] Query tijd: <15 sec (95th percentile)
 - [ ] Cost per query: <€0.10
 - [ ] Zero timeouts during normale operatie
 - [ ] Dashboard load tijd: <5 sec
 
-### 🚨 Emergency Troubleshooting
+### Emergency Troubleshooting
 
 **Query te langzaam?**
 
