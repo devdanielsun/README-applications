@@ -1,8 +1,12 @@
 # README-applications
 This project contains READMEs containing best practises, instructions and such about random applications I use(d).
 
- - [GitHub Flavored Markdown (GFM) – Feature Examples](/Github-MD-examples.md)
+* [GitHub Flavored Markdown (GFM) – Feature Examples](/Github-MD-examples.md)
 
-## Grafana
+## [IaC](IaC)
 
- - [Grafana Query Best Practices](Grafana/Grafana-Query-Best-Practices.md)
+* [Azure Verified Modules (AVM)](/IaC/AzureVerifiedModules.md)
+
+## [Grafana](Grafana)
+
+* [Grafana Query Best Practices](Grafana/Grafana-Query-Best-Practices.md)
