@@ -3,6 +3,10 @@ This project contains READMEs containing best practises, instructions and such a
 
 * [GitHub Flavored Markdown (GFM) – Feature Examples](/Github-MD-examples.md)
 
+## Azure CLI
+
+* [Azure CLI README](/Azure%20CLI/README.md)
+
 ## IaC
 
 * [IaC README](/IaC/README.md)
