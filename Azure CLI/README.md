@@ -7,10 +7,24 @@
 
 ### Shortcut CLI commands:
 
-`az login`
+```powershell
+az login
+```
 
-`az account show`
+```powershell
+az account show
+```
 
-`az account subscription list`
+```powershell
+az account subscription list
+```
 
-`az account set --subscription "xyz"`
+```powershell
+az account set --subscription "xyz"
+```
+
+#### webapp 
+
+```powershell
+az webapp config access-restriction show --name *REPLACE_ME* --resource-group *REPLACE_ME* --query "ipSecurityRestrictions" -o json | ConvertFrom-Json
+```
