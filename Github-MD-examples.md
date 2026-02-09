@@ -4,7 +4,7 @@ This document demonstrates **GitHub Flavored Markdown (GFM)** features as render
 
 | WHAT | LINK |
 | --- | --- |
-| Supported Code Languages in Codeblock | [https://pygments.org/languages/](https://pygments.org/languages/) |
+| Supported Code Languages in Codeblock | [https://rouge-ruby.github.io/docs/file.Languages.html](https://rouge-ruby.github.io/docs/file.Languages.html) |
 
 ---
 
