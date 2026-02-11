@@ -5,7 +5,11 @@ This project contains READMEs containing best practises, instructions and such a
 
 ## Azure CLI
 
-* [Azure CLI README](/Azure%20CLI/README.md)
+* [Azure CLI README](/AzureCLI/README.md)
+
+## Copilot Agents
+
+* [Copilot Agents README](/CopilotAgents/README.md)
 
 ## IaC
 
