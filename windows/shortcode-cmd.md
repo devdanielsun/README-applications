@@ -7,7 +7,7 @@ You can make a batch script and save it into your path.
 cd my/very/long/path/that/i/cannot/remember
 ```
 
-4. Now you can type quickcd at the command line. It can also be called inside a script using the call function
+4. Now you can type `example` at the command line. It can also be called inside a script using the call function
 `example`
 
 ---
